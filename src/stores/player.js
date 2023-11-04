@@ -4,18 +4,30 @@ export const usePlayerStore = defineStore('player', {
     state: () => ({
         playlist   : [],
         now_playing: {}, // SONG OBJECT
+        index: -1
     }),
     getters: {
         getNextSong(){
+            if (this.index == this.playlist.length -1) {
+                return false;
+            }
+             return this.playlist[this.index + 1];
+
 
         },
         getPreviousSong() {
+            if (this.index == 0) {
+                return false;
+            }
+            return this.playlist[this.index - 1];
+
 
         },
         getNowPlayingSongId() {
             return this.now_playing?.id;
         },
         getNowPlaying() {
+            return this.now_playing;
 
         },
         getNowPlayingAlbumID() {
@@ -36,9 +48,12 @@ export const usePlayerStore = defineStore('player', {
     },
     actions: {
         setPlaylist(songs) {
-
+            this.playlist = songs;
+            this.now_playing = songs[0]
         },
         setNowPlaying(song) {
+            this.index = this.playlist.indexOf(song);
+            this.now_playing = song;
 
         },
         resetNowPlaying() {
